@@ -1,0 +1,212 @@
+package collections;
+
+import java.util.Scanner;
+
+//Node class for Book
+class Book {
+ int bookId;
+ String title;
+ String author;
+ int copies;
+ Book next;
+
+ Book(int bookId, String title, String author, int copies) {
+     this.bookId = bookId;
+     this.title = title;
+     this.author = author;
+     this.copies = copies;
+     this.next = null;
+ }
+}
+
+//Linked List for Library
+class Library {
+ Book head;
+
+ // Add book at end
+ void addBook(int id, String title, String author, int copies) {
+     Book newBook = new Book(id, title, author, copies);
+     if (head == null) {
+         head = newBook;
+         System.out.println("Book added successfully!");
+         return;
+     }
+     Book temp = head;
+     while (temp.next != null) {
+         temp = temp.next;
+     }
+     temp.next = newBook;
+     System.out.println("Book added successfully!");
+ }
+
+ // Display all books
+ void displayBooks() {
+     if (head == null) {
+         System.out.println("No books available!");
+         return;
+     }
+     Book temp = head;
+     System.out.println("\n--- Library Books ---");
+     while (temp != null) {
+         System.out.println("ID: " + temp.bookId + " | Title: " + temp.title +
+                            " | Author: " + temp.author + " | Copies: " + temp.copies);
+         temp = temp.next;
+     }
+ }
+
+ // Search book by ID
+ Book searchBook(int id) {
+     Book temp = head;
+     while (temp != null) {
+         if (temp.bookId == id)
+             return temp;
+         temp = temp.next;
+     }
+     return null;
+ }
+
+ // Update book details
+ void updateBook(int id, String newTitle, String newAuthor, int newCopies) {
+     Book book = searchBook(id);
+     if (book == null) {
+         System.out.println("Book not found!");
+         return;
+     }
+     book.title = newTitle;
+     book.author = newAuthor;
+     book.copies = newCopies;
+     System.out.println("Book updated successfully!");
+ }
+
+ // Delete book
+ void deleteBook(int id) {
+     if (head == null) return;
+
+     if (head.bookId == id) {
+         head = head.next;
+         System.out.println("Book deleted successfully!");
+         return;
+     }
+
+     Book temp = head;
+     while (temp.next != null && temp.next.bookId != id) {
+         temp = temp.next;
+     }
+     if (temp.next == null) {
+         System.out.println("Book not found!");
+         return;
+     }
+     temp.next = temp.next.next;
+     System.out.println("Book deleted successfully!");
+ }
+
+ // Issue book
+ void issueBook(int id) {
+     Book book = searchBook(id);
+     if (book == null) {
+         System.out.println("Book not found!");
+         return;
+     }
+     if (book.copies > 0) {
+         book.copies--;
+         System.out.println("Book issued successfully!");
+     } else {
+         System.out.println("No copies available!");
+     }
+ }
+
+ // Return book
+ void returnBook(int id) {
+     Book book = searchBook(id);
+     if (book == null) {
+         System.out.println("Book not found!");
+         return;
+     }
+     book.copies++;
+     System.out.println("Book returned successfully!");
+ }
+}
+
+//Main class
+public class LLProject {
+ public static void main(String[] args) {
+     Scanner sc = new Scanner(System.in);
+     Library library = new Library();
+
+     while (true) {
+         System.out.println("\n--- Library Management Menu ---");
+         System.out.println("1. Add Book");
+         System.out.println("2. Display Books");
+         System.out.println("3. Search Book");
+         System.out.println("4. Update Book");
+         System.out.println("5. Delete Book");
+         System.out.println("6. Issue Book");
+         System.out.println("7. Return Book");
+         System.out.println("8. Exit");
+         System.out.print("Enter choice: ");
+         int choice = sc.nextInt();
+         sc.nextLine(); // consume newline
+
+         switch (choice) {
+             case 1:
+                 System.out.print("Enter Book ID: ");
+                 int id = sc.nextInt();
+                 sc.nextLine();
+                 System.out.print("Enter Title: ");
+                 String title = sc.nextLine();
+                 System.out.print("Enter Author: ");
+                 String author = sc.nextLine();
+                 System.out.print("Enter Copies: ");
+                 int copies = sc.nextInt();
+                 library.addBook(id, title, author, copies);
+                 break;
+             case 2:
+                 library.displayBooks();
+                 break;
+             case 3:
+                 System.out.print("Enter Book ID to search: ");
+                 int searchId = sc.nextInt();
+                 Book book = library.searchBook(searchId);
+                 if (book != null) {
+                     System.out.println("Found -> ID: " + book.bookId +
+                                        " | Title: " + book.title +
+                                        " | Author: " + book.author +
+                                        " | Copies: " + book.copies);
+                 } else {
+                     System.out.println("Book not found!");
+                 }
+                 break;
+             case 4:
+                 System.out.print("Enter Book ID to update: ");
+                 int updateId = sc.nextInt();
+                 sc.nextLine();
+                 System.out.print("Enter New Title: ");
+                 String newTitle = sc.nextLine();
+                 System.out.print("Enter New Author: ");
+                 String newAuthor = sc.nextLine();
+                 System.out.print("Enter New Copies: ");
+                 int newCopies = sc.nextInt();
+                 library.updateBook(updateId, newTitle, newAuthor, newCopies);
+                 break;
+             case 5:
+                 System.out.print("Enter Book ID to delete: ");
+                 library.deleteBook(sc.nextInt());
+                 break;
+             case 6:
+                 System.out.print("Enter Book ID to issue: ");
+                 library.issueBook(sc.nextInt());
+                 break;
+             case 7:
+                 System.out.print("Enter Book ID to return: ");
+                 library.returnBook(sc.nextInt());
+                 break;
+             case 8:
+                 System.out.println("Exiting...");
+                 sc.close();
+                 return;
+             default:
+                 System.out.println("Invalid choice!");
+         }
+     }
+ }
+}
