@@ -1,0 +1,210 @@
+package collections;
+
+import java.util.*;
+
+// Node creation for Singly Linked List
+class Student {
+    int id;
+    String name;
+    float marks;
+    Student next;
+
+    // constructor
+    Student(int id, String name, float marks) {
+        this.id = id;
+        this.name = name;
+        this.marks = marks;
+        this.next = null;
+    }
+}
+
+class Studentlist {
+    Student head;
+
+    // add student at end
+    void addStudent(int id, String name, float marks) {
+        Student newStudent = new Student(id, name, marks);
+        if (head == null) {
+            head = newStudent;
+        } else {
+            Student temp = head;
+            while (temp.next != null) {
+                temp = temp.next;
+            }
+            temp.next = newStudent;
+        }
+        System.out.println("Student " + name + " (ID: " + id + ") added successfully");
+    }
+
+    // delete student detail by id
+    void deleteStudent(int id) {
+        if (head == null) {
+            System.out.println("No record is deleted");
+            return;
+        }
+        if (head.id == id) {
+            System.out.println("Student " + head.name + " (ID: " + id + ") deleted");
+            head = head.next;
+            return;
+        }
+        Student temp = head;
+        while (temp.next != null && temp.next.id != id) {
+            temp = temp.next;
+        }
+        if (temp.next == null) {
+            System.out.println("Student with ID " + id + " not found");
+        } else {
+            System.out.println("Student " + temp.next.name + " (ID: " + id + ") deleted");
+            temp.next = temp.next.next;
+        }
+    }
+
+    // display all student records
+    void displayStudents() {
+        if (head == null) {
+            System.out.println("No student records available");
+            return;
+        }
+        System.out.println("Student Records:");
+        Student temp = head;
+        while (temp != null) {
+            System.out.println(" -> ID: " + temp.id + ", Name: " + temp.name + " , Marks: " + temp.marks);
+            temp = temp.next;
+        }
+    }
+
+    // search student details
+    void searchStudent(int id) {
+        Student temp = head;
+        while (temp != null) {
+            if (temp.id == id) {
+                System.out.println(" -> ID: " + temp.id + " , Name: " + temp.name + " , Marks: " + temp.marks);
+                return;
+            }
+            temp = temp.next;
+        }
+        System.out.println("Student with ID " + id + " not found");
+    }
+
+    // find topper
+    void findTopper() {
+        if (head == null) {
+            System.out.println("No records found");
+            return;
+        }
+        Student temp = head;
+        Student topper = head;
+        while (temp != null) {
+            if (temp.marks > topper.marks) {
+                topper = temp;
+            }
+            temp = temp.next;
+        }
+        System.out.println("Topper -> ID:" + topper.id + " , Name: " + topper.name + " , Marks: " + topper.marks);
+    }
+
+    // count student record
+    void countStudents() {
+        int count = 0;
+        Student temp = head;
+        while (temp != null) {
+            count++;
+            temp = temp.next;
+        }
+        System.out.println("Total no of students: " + count);
+    }
+
+    // update student details by id
+    void updateStudent(int id, String newName, float newMarks) {
+        Student temp = head;
+        while (temp != null) {
+            if (temp.id == id) {
+                temp.name = newName;
+                temp.marks = newMarks;
+                System.out.println("Student (ID: " + id + ") updated successfully");
+                return;
+            }
+            temp = temp.next;
+        }
+        System.out.println("Student with ID " + id + " not found for update");
+    }
+}
+
+public class SinglyLinkedList {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Studentlist sl = new Studentlist();
+        int choice;
+
+        do {
+            System.out.println("\n---------- Student Database ---------------");
+            System.out.println("1. Add Student");
+            System.out.println("2. Delete Student");
+            System.out.println("3. Display Students");
+            System.out.println("4. Search Student");
+            System.out.println("5. Find Topper");
+            System.out.println("6. Count Students");
+            System.out.println("7. Update Student");
+            System.out.println("8. Exit");
+            System.out.print("Enter your choice: ");
+            choice = sc.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter student Id: ");
+                    int id = sc.nextInt();
+                    sc.nextLine();
+                    System.out.print("Enter student name: ");
+                    String name = sc.nextLine();
+                    System.out.print("Enter Marks: ");
+                    float marks = sc.nextFloat();
+                    sl.addStudent(id, name, marks);
+                    break;
+
+                case 2:
+                    System.out.print("Enter student id to delete: ");
+                    int delId = sc.nextInt();
+                    sl.deleteStudent(delId);
+                    break;
+
+                case 3:
+                    sl.displayStudents();
+                    break;
+
+                case 4:
+                    System.out.print("Enter student id to search: ");
+                    int searchId = sc.nextInt();
+                    sl.searchStudent(searchId);
+                    break;
+
+                case 5:
+                    sl.findTopper();
+                    break;
+
+                case 6:
+                    sl.countStudents();
+                    break;
+
+                case 7:
+                    System.out.print("Enter student id to update: ");
+                    int updId = sc.nextInt();
+                    sc.nextLine();
+                    System.out.print("Enter new name: ");
+                    String newName = sc.nextLine();
+                    System.out.print("Enter new marks: ");
+                    float newMarks = sc.nextFloat();
+                    sl.updateStudent(updId, newName, newMarks);
+                    break;
+
+                case 8:
+                    System.out.println("Exiting...");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice");
+            }
+
+        } while (choice != 8);
+        sc.close();
+    }
+}
